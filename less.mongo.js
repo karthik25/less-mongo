@@ -16,6 +16,14 @@ var less = (function(global) {
 			defaultPrompt : 0,	// 0-4 or a string
 		};
 
+    var helpItems = [
+        { 
+            for: "less.c (or) less.listCollections", 
+            parameters: "params: regex (optional)", 
+            desc: "Prints the collections in the current database. Optionally pass a regex to filter collections"  
+        }
+    ];
+    
 	api = function () {
 		return api.version();
 	};
@@ -26,16 +34,17 @@ var less = (function(global) {
     
     api.help = function () {
         print("less.mongo - a simple utility to type less and get more out of the mongo shell\n\n");
-        
-        print("less.c (or) less.listCollections\n");
-        print("\t params: regex (optional)");
-        print("\n");
-        print("\t Prints the collections in the current database. Optionally pass a regex to filter collections")
-        
-        print("\n\n")
+                    
+        helpItems.forEach(function (helpItem){
+            print(helpItem.for + "\n");
+            print("\t " + helpItem.parameters);
+            print("\n");
+            print("\t " + helpItem.desc);
+            print("\n\n");
+        });
     };
     
-    api.c = function (regex) {
+    api.listCollections = function (regex) {
       var collections = db.getCollectionNames();
       collections.forEach(function (collection){
           if (typeof regex === "object"){
@@ -49,7 +58,7 @@ var less = (function(global) {
       });
     };
     
-    api.listCollections = api.c;
+    api.c = api.listCollections;
     
     return api;
 }(this));
