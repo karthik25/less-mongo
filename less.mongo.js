@@ -47,7 +47,7 @@ var less = (function(global) {
     api.listCollections = function (regex) {
       var collections = db.getCollectionNames();
       collections.forEach(function (collection){
-          if (typeof regex === "object"){
+          if (regex instanceof RegExp){
               if (regex.test(collection)){
                   print(collection);
               }
