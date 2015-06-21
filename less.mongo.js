@@ -7,20 +7,25 @@
  *
  *
  */
-var less = (function(global) {
+var less = (function (global) {
     'use strict';
     
     var api,
 		version = "1.0.0",
 		config = {
-			defaultPrompt : 0,	// 0-4 or a string
+			
 		};
 
     var helpItems = [
-        { 
-            for: "less.c (or) less.listCollections", 
-            parameters: "params: regex (optional)", 
-            desc: "Prints the collections in the current database. Optionally pass a regex to filter collections"  
+        {
+            title: "less.c (or) less.listCollections",
+            parameters: "params: regex (optional)",
+            desc: "prints the collections in the current database. Optionally pass a regex to filter collections"
+        },
+        {
+            title: "less.prompt",
+            parameters: "params: <none>",
+            desc: "change the prompt to display the current database name"
         }
     ];
     
@@ -33,20 +38,24 @@ var less = (function(global) {
     };
     
     api.help = function () {
-        print("less.mongo - a simple utility to type less and get more out of the mongo shell\n\n");
-                    
-        helpItems.forEach(function (helpItem){
-            print(helpItem.for + "\n");
-            print("\t " + helpItem.parameters);
+        print("#############################################################################\n");
+        print("###                      less.mongo                                       ###\n");
+        print("### a simple utility to type less and get more out of the mongo shell     ###\n");
+        print("#############################################################################\n");
+        
+        helpItems.forEach(function (helpItem) {
+            print("\t" + helpItem.title + "\n");
+            print("\t\t " + helpItem.parameters);
             print("\n");
-            print("\t " + helpItem.desc);
+            print("\t\t " + helpItem.desc);
             print("\n\n");
+            print("====================================================================");
         });
     };
     
     api.listCollections = function (regex) {
-      var collections = db.getCollectionNames();
-      collections.forEach(function (collection){
+        var collections = db.getCollectionNames();
+        collections.forEach(function (collection){
           if (regex instanceof RegExp){
               if (regex.test(collection)){
                   print(collection);
@@ -59,6 +68,12 @@ var less = (function(global) {
     };
     
     api.c = api.listCollections;
+    
+    api.prompt = function (){
+      global.prompt = function (){
+        return db.getName() +  "> ";
+      };
+    };
     
     return api;
 }(this));
