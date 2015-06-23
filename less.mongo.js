@@ -18,6 +18,16 @@ var less = (function (global) {
 
     var helpItems = [
         {
+          title: "less()",
+          parameters: "params: <none>",
+          desc: "print version information"
+        },
+        {
+          title: "less.help()",
+          parameters: "params: <none>",
+          desc: "print all possible functions in less"
+        },
+        {
             title: "less.c (or) less.listCollections",
             parameters: "params: regex (optional)",
             desc: "prints the collections in the current database. Optionally pass a regex to filter collections"
