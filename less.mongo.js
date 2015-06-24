@@ -87,3 +87,38 @@ var less = (function (global) {
     
     return api;
 }(this));
+
+/*
+ * less.helpers - set of utilities to reduce the need to write lengthy custom js
+ *
+ *      Version 1.0.0
+ *
+ *  Copyright 2015 
+ *
+ */
+(function (){
+    var getMaxDoc = function (cursor){
+        var doc, size, maxSize = 0, maxDocId = null;
+        while (cursor.hasNext()) {
+            doc = cursor.next();
+            size = Object.bsonsize(doc);
+            if (size > maxSize) {
+                maxSize = size;
+                maxDocId = doc._id;
+            }
+        }
+        
+        return {
+          maxSize: maxSize,
+          maxDocId: maxDocId
+        };
+    };
+    
+    DBQuery.prototype.getMaxDoc = function () {
+      return getMaxDoc(this);  
+    };
+    
+    DBCollection.prototype.getMaxDoc = function (query, fields, limit, skip, batchSize, options) {
+      return this.find(query, fields, limit, skip, batchSize, options).getMaxDoc();  
+    };
+}());

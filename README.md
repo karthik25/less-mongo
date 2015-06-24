@@ -17,3 +17,13 @@ To get a list of all possible options, type:
 ```jscript
 > less.help()
 ```
+
+# less.helpers
+
+less.helpers provides utilities that would otherwise require a lot of typing. Right now you just have 1 utility which could used to get information about the document with the maximum size
+
+```jscript
+db.collection.getMaxDoc()
+```
+
+Thanks to mesh (https://github.com/skratchdot/mesh) for the inspiration! I found mesh when I was reading about wrappers for the shell to reduce the amount of typing I do for one of the products that I work on and from that point I have never looked back :)
