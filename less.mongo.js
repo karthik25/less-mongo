@@ -114,11 +114,35 @@ var less = (function (global) {
         };
     };
     
+    var processCollection = function (db, collectionName){
+       var count = db.getCollection(collectionName).count();
+       var maxStats = db.getCollection(collectionName).getMaxDoc();
+       return {
+          collection: collectionName,
+          count: count,
+          maxSize: maxStats.maxSize              
+       };
+    }
+    
+    var rowCounts = function (db) {
+        var stats = [];
+        var collections = db.getCollectionNames();
+        collections.forEach(function (collection){
+           stat = processCollection(db, collection);
+           stats.push(stat);
+        });
+        return stats;
+    };
+    
     DBQuery.prototype.getMaxDoc = function () {
-      return getMaxDoc(this);  
+      return getMaxDoc(this);
     };
     
     DBCollection.prototype.getMaxDoc = function (query, fields, limit, skip, batchSize, options) {
       return this.find(query, fields, limit, skip, batchSize, options).getMaxDoc();  
+    };
+    
+    DB.prototype.rowCounts = function () {
+      return rowCounts(this);
     };
 }());

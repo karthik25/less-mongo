@@ -20,10 +20,18 @@ To get a list of all possible options, type:
 
 # less.helpers
 
-less.helpers provides utilities that would otherwise require a lot of typing. Right now you just have 1 utility which could used to get information about the document with the maximum size
+less.helpers provides utilities that would otherwise require a lot of typing. Right now you have the following utilities.
+
+Gets the document with the maximum size, there is also an extension to DBQuery
 
 ```jscript
 db.collection.getMaxDoc()
+```
+
+The next utility gets you a list of the collections in the current database, that contains helpful information like row count, max document size
+
+```jscript
+db.rowCounts()
 ```
 
 Thanks to mesh (https://github.com/skratchdot/mesh) for the inspiration! I found mesh when I was reading about wrappers for the shell to reduce the amount of typing I do for one of the products that I work on and from that point I have never looked back :)
