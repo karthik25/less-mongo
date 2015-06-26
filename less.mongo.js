@@ -114,13 +114,25 @@ var less = (function (global) {
         };
     };
     
+    // credits: http://stackoverflow.com/q/10420352/312219
+    var humanizedSize = function (bytes) {
+        var i = -1;
+        var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+        do {
+            bytes = bytes / 1024;
+            i++;
+        } while (bytes > 1024);
+
+        return Math.max(bytes, 0.1).toFixed(1) + byteUnits[i];
+    };
+    
     var processCollection = function (db, collectionName){
        var count = db.getCollection(collectionName).count();
        var maxStats = db.getCollection(collectionName).getMaxDoc();
        return {
           collection: collectionName,
           count: count,
-          maxSize: maxStats.maxSize              
+          maxSize: humanizedSize(maxStats.maxSize)
        };
     }
     
