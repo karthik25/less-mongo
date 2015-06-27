@@ -96,24 +96,7 @@ var less = (function (global) {
  *  Copyright 2015 
  *
  */
-(function (){
-    var getMaxDoc = function (cursor){
-        var doc, size, maxSize = 0, maxDocId = null;
-        while (cursor.hasNext()) {
-            doc = cursor.next();
-            size = Object.bsonsize(doc);
-            if (size > maxSize) {
-                maxSize = size;
-                maxDocId = doc._id;
-            }
-        }
-        
-        return {
-          maxSize: maxSize,
-          maxDocId: maxDocId
-        };
-    };
-    
+(function (){    
     // credits: http://stackoverflow.com/q/10420352/312219
     var humanizedSize = function (bytes) {
         var i = -1;
@@ -126,6 +109,23 @@ var less = (function (global) {
         return Math.max(bytes, 0.1).toFixed(1) + byteUnits[i];
     };
     
+    var getMaxDoc = function (cursor){
+        var doc, size, maxSize = 0, maxDocId = null;
+        while (cursor.hasNext()) {
+            doc = cursor.next();
+            size = Object.bsonsize(doc);
+            if (size > maxSize) {
+                maxSize = size;
+                maxDocId = doc._id;
+            }
+        }
+        
+        return {
+          maxSize: humanizedSize(maxSize),
+          maxDocId: maxDocId
+        };
+    };
+
     var processCollection = function (db, collectionName){
        var count = db.getCollection(collectionName).count();
        var maxStats = db.getCollection(collectionName).getMaxDoc();
