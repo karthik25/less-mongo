@@ -109,7 +109,7 @@ var less = (function (global) {
         return Math.max(bytes, 0.1).toFixed(1) + byteUnits[i];
     };
     
-    var getMaxDoc = function (cursor){
+    var getMaxDocStats = function (cursor){
         var doc, size, maxSize = 0, maxDocId = null;
         while (cursor.hasNext()) {
             doc = cursor.next();
@@ -128,15 +128,15 @@ var less = (function (global) {
 
     var processCollection = function (db, collectionName){
        var count = db.getCollection(collectionName).count();
-       var maxStats = db.getCollection(collectionName).getMaxDoc();
+       var maxStats = db.getCollection(collectionName).getMaxDocStats();
        return {
           collection: collectionName,
           count: count,
-          maxSize: humanizedSize(maxStats.maxSize)
+          maxSize: maxStats.maxSize
        };
     }
     
-    var rowCounts = function (db) {
+    var collectionStats = function (db) {
         var stats = [];
         var collections = db.getCollectionNames();
         collections.forEach(function (collection){
@@ -146,15 +146,15 @@ var less = (function (global) {
         return stats;
     };
     
-    DBQuery.prototype.getMaxDoc = function () {
-      return getMaxDoc(this);
+    DBQuery.prototype.getMaxDocStats = function () {
+      return getMaxDocStats(this);
     };
     
-    DBCollection.prototype.getMaxDoc = function (query, fields, limit, skip, batchSize, options) {
-      return this.find(query, fields, limit, skip, batchSize, options).getMaxDoc();  
+    DBCollection.prototype.getMaxDocStats = function (query, fields, limit, skip, batchSize, options) {
+      return this.find(query, fields, limit, skip, batchSize, options).getMaxDocStats();  
     };
     
-    DB.prototype.rowCounts = function () {
-      return rowCounts(this);
+    DB.prototype.collectionStats = function () {
+      return collectionStats(this);
     };
 }());
