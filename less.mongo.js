@@ -144,7 +144,7 @@ var less = (function (global) {
            stats.push(stat);
         });
         return stats;
-    };
+    };    
     
     DBQuery.prototype.getMaxDocStats = function () {
       return getMaxDocStats(this);
@@ -156,5 +156,19 @@ var less = (function (global) {
     
     DB.prototype.collectionStats = function () {
       return collectionStats(this);
+    };
+    
+    DBCollection.prototype.peek = function (query, fields, peekStartCount, peekEndCount) {
+        var document = this.findOne(query, fields);
+        if (!peekEndCount) {
+            peekEndCount = peekStartCount;
+            peekStartCount = 0;
+        }
+        var object = {};
+        var allKeys = Object.keys(document);
+        for (index = peekStartCount; index <= peekEndCount; index++) {
+            object[allKeys[index]] = document[allKeys[index]];
+        }
+        printjson(object);
     };
 }());
