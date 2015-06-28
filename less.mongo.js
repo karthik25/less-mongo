@@ -109,6 +109,19 @@ var less = (function (global) {
         return Math.max(bytes, 0.1).toFixed(1) + byteUnits[i];
     };
     
+    var resolveType = function (object) {
+        var type = typeof object;
+        if (type === "object") {
+            if (object instanceof ObjectId) {
+                return "ObjectId";
+            }
+            else if (object instanceof Array) {
+                return "Array";
+            }
+        }
+        return type;
+    }
+    
     var getMaxDocStats = function (cursor){
         var doc, size, maxSize = 0, maxDocId = null;
         while (cursor.hasNext()) {
@@ -180,7 +193,7 @@ var less = (function (global) {
         var _schema = {};
 
         for (var key in document) {
-            _schema[key] = typeof document[key];
+            _schema[key] = resolveType(document[key]);
         }
         
         return _schema;
