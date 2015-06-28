@@ -171,4 +171,18 @@ var less = (function (global) {
         }
         printjson(object);
     };
+    
+    DBCollection.prototype.schema = function (query) {
+        if (!query) {
+          query = {};
+        }
+        var document = this.findOne(query);
+        var _schema = {};
+
+        for (var key in document) {
+            _schema[key] = typeof document[key];
+        }
+        
+        return _schema;
+    };
 }());
