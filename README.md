@@ -34,4 +34,16 @@ The next utility gets you a list of the collections in the current database, tha
 > db.collectionStats()
 ```
 
+peek() is a utility that could act as an add-on to a findOne query
+
+```jscript
+> db.collection.peek(query, fields, peekStartCount, peekEndCount)
+```
+
+The next useful utility is a .schema utility. Mesh also has one which is much more comprehensive but this is a lot simpler utility to quickly have a peek at the schema.
+
+```jscript
+> db.collection.schema()
+```
+
 Thanks to mesh (https://github.com/skratchdot/mesh) for the inspiration! I found mesh when I was reading about wrappers for the shell to reduce the amount of typing I do for one of the products that I work on and from that point I have never looked back :)
