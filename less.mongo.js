@@ -185,15 +185,28 @@ var less = (function (global) {
         printjson(object);
     };
     
-    DBCollection.prototype.schema = function (query) {
-        if (!query) {
-          query = {};
-        }
+    DBCollection.prototype.schema = function (query, expandArrays) {
+        if (!query) query = {};
+        if (!expandArrays) expandArrays = false;
+        
         var document = this.findOne(query);
         var _schema = {};
 
         for (var key in document) {
             _schema[key] = resolveType(document[key]);
+            if (_schema[key] === "Array" && expandArrays && document[key].length > 0) {
+                var firstEntry = document[key][0];
+                if (typeof firstEntry === "object") {
+                    var _aSchema = {};
+                    for (var aKey in firstEntry) {
+                        _aSchema[aKey] = resolveType(firstEntry[aKey]);
+                    }
+                    _schema[key] = _aSchema;
+                }
+                else {
+                    _schema[key] = "Array(" + typeof firstEntry + ")";
+                }
+            }
         }
         
         return _schema;
