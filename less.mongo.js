@@ -157,6 +157,25 @@ var less = (function (global) {
            stats.push(stat);
         });
         return stats;
+    };
+    
+    var identifyValueTypes = function (object, recurse) {
+        var _schema = {};
+        
+        for (var key in object) {
+            _schema[key] = resolveType(object[key]);
+            if (recurse && _schema[key] === "Array" && object[key].length > 0) {
+                var firstEntry = object[key][0];
+                if (typeof firstEntry === "object") {
+                    _schema[key] = [identifyValueTypes(firstEntry, recurse)];
+                }
+                else {
+                    _schema[key] = [typeof firstEntry];
+                }
+            }
+        }
+        
+        return _schema;
     };    
     
     DBQuery.prototype.getMaxDocStats = function () {
@@ -185,29 +204,12 @@ var less = (function (global) {
         printjson(object);
     };
     
-    DBCollection.prototype.schema = function (query, expandArrays) {
+    DBCollection.prototype.schema = function (query, recurse) {
         if (!query) query = {};
-        if (!expandArrays) expandArrays = false;
+        if (!recurse) recurse = false;
         
         var document = this.findOne(query);
-        var _schema = {};
-
-        for (var key in document) {
-            _schema[key] = resolveType(document[key]);
-            if (_schema[key] === "Array" && expandArrays && document[key].length > 0) {
-                var firstEntry = document[key][0];
-                if (typeof firstEntry === "object") {
-                    var _aSchema = {};
-                    for (var aKey in firstEntry) {
-                        _aSchema[aKey] = resolveType(firstEntry[aKey]);
-                    }
-                    _schema[key] = _aSchema;
-                }
-                else {
-                    _schema[key] = "Array(" + typeof firstEntry + ")";
-                }
-            }
-        }
+        var _schema = identifyValueTypes(document, recurse);
         
         return _schema;
     };
