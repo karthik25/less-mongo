@@ -164,6 +164,11 @@ var less = (function (global) {
         
         for (var key in object) {
             _schema[key] = resolveType(object[key]);
+            
+            if (recurse && _schema[key] === "object") {
+                _schema[key] = identifyValueTypes(object[key], recurse);
+            }
+            
             if (recurse && _schema[key] === "Array" && object[key].length > 0) {
                 var firstEntry = object[key][0];
                 if (typeof firstEntry === "object") {
