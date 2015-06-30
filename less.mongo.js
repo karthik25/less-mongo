@@ -165,7 +165,7 @@ var less = (function (global) {
         for (var key in object) {
             var keyValue = object[key];
             
-            if (keyValue == null || keyValue == undefined) {
+            if (keyValue == null) {
                 _schema[key] = null;
                 continue;
             }        
