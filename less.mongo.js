@@ -159,6 +159,15 @@ var less = (function (global) {
         return stats;
     };
     
+    var extend = function (settings, options) {
+      for (var key in settings) {
+        if (options.hasOwnProperty(key)) {
+             settings[key] = options[key];   
+        }
+      }
+      return settings;
+    };
+    
     var identifyValueTypes = function (object, recurse) {
         var _schema = {};
         
@@ -188,7 +197,7 @@ var less = (function (global) {
         }
         
         return _schema;
-    };    
+    };
     
     DBQuery.prototype.getMaxDocStats = function () {
       return getMaxDocStats(this);
@@ -216,12 +225,14 @@ var less = (function (global) {
         printjson(object);
     };
     
-    DBCollection.prototype.schema = function (query, recurse) {
-        if (!query) query = {};
-        if (!recurse) recurse = false;
+    DBCollection.prototype.schema = function (options) {
+        var settings = extend({
+            query: {},
+            recurse: false
+        }, options || {});
         
-        var document = this.findOne(query);
-        var _schema = identifyValueTypes(document, recurse);
+        var document = this.findOne(settings.query);
+        var _schema = identifyValueTypes(document, settings.recurse);
         
         return _schema;
     };
