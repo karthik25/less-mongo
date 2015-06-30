@@ -228,10 +228,11 @@ var less = (function (global) {
     DBCollection.prototype.schema = function (options) {
         var settings = extend({
             query: {},
+            fields: {},
             recurse: false
         }, options || {});
         
-        var document = this.findOne(settings.query);
+        var document = this.findOne(settings.query, settings.fields);
         var _schema = identifyValueTypes(document, settings.recurse);
         
         return _schema;
