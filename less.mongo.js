@@ -163,19 +163,21 @@ var less = (function (global) {
         var _schema = {};
         
         for (var key in object) {
-            if (object[key] == null || object[key] == undefined) {
+            var keyValue = object[key];
+            
+            if (keyValue == null || keyValue == undefined) {
                 _schema[key] = null;
                 continue;
             }        
             
-            _schema[key] = resolveType(object[key]);
+            _schema[key] = resolveType(keyValue);
             
             if (recurse && _schema[key] === "object") {
-                _schema[key] = identifyValueTypes(object[key], recurse);
+                _schema[key] = identifyValueTypes(keyValue, recurse);
             }
             
-            if (recurse && _schema[key] === "Array" && object[key].length > 0) {
-                var firstEntry = object[key][0];
+            if (recurse && _schema[key] === "Array" && keyValue.length > 0) {
+                var firstEntry = keyValue[0];
                 if (typeof firstEntry === "object") {
                     _schema[key] = [identifyValueTypes(firstEntry, recurse)];
                 }
