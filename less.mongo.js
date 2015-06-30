@@ -163,6 +163,11 @@ var less = (function (global) {
         var _schema = {};
         
         for (var key in object) {
+            if (object[key] == null || object[key] == undefined) {
+                _schema[key] = null;
+                continue;
+            }        
+            
             _schema[key] = resolveType(object[key]);
             
             if (recurse && _schema[key] === "object") {
