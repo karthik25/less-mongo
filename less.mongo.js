@@ -211,20 +211,6 @@ var less = (function (global) {
       return collectionStats(this);
     };
     
-    DBCollection.prototype.peek = function (query, fields, peekStartCount, peekEndCount) {
-        var document = this.findOne(query, fields);
-        if (!peekEndCount) {
-            peekEndCount = peekStartCount;
-            peekStartCount = 0;
-        }
-        var object = {};
-        var allKeys = Object.keys(document);
-        for (index = peekStartCount; index <= peekEndCount; index++) {
-            object[allKeys[index]] = document[allKeys[index]];
-        }
-        printjson(object);
-    };
-    
     DBCollection.prototype.schema = function (options) {
         var settings = extend({
             query: {},
@@ -236,5 +222,44 @@ var less = (function (global) {
         var _schema = identifyValueTypes(document, settings.recurse);
         
         return _schema;
+    };
+    
+    DBCollection.prototype.findInArray = function (options) {
+        var settings = extend({
+            tQuery: {},
+            tFields: {},
+            aFieldName: '',
+            aLimiter: null
+        }, options || {});  
+        
+        if (! settings.aFieldName) {
+            throw new Error("Array field name cannot be null - aFieldName");
+        }
+        
+        var matchedArrayEntries = [];
+        
+        var cursor = this.find(settings.tQuery, settings.tFields);
+        while (cursor.hasNext()){
+            var current = cursor.next();
+            var arrayField = current[settings.aFieldName];
+            
+            if (!settings.aLimiter) {
+                matchedArrayEntries = matchedArrayEntries.concat(arrayField);
+            }
+            else {
+                var matched;
+                arrayField.forEach(function (entry) {
+                    matched = false;
+                    for (var key in settings.aLimiter) {
+                        if (!matched && entry.hasOwnProperty(key) && entry[key] === settings.aLimiter[key]) {
+                            matchedArrayEntries.push(entry);
+                            matched = true;
+                        }
+                    }
+                });
+            }
+        }
+        
+        return matchedArrayEntries;
     };
 }());
