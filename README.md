@@ -44,9 +44,12 @@ Possible values for options include - query, fields, recurse
 
 ```jscript
 {
-    query: {}, /* any valid mongo query */
-    fields: {}, /* any valid mongo field list */
-    recurse: true /* identify the schema for nested object too, valid values are true | false */
+    /* any valid mongo query */
+    query: {},
+    /* any valid mongo field list */
+    fields: {},
+    /* identify the schema for nested object too, valid values are true | false */
+    recurse: true
 }
 ```
 
@@ -60,10 +63,15 @@ Possible values for options include - tQuery (top-level query), tFields (top-lev
 
 ```jscript
 {
-    tQuery: {}, /* the top level query to limit documents */
-    tFields: {}, /* the top level field limiter, should definitely include the array being filtered (obviously!) */
-    aFieldName: 'someArrayField', /* Name of array field that you wish to filter further */
-    aLimiter: { "someField": "someValue", "someOtherField": /regex/ } /* Filter for the entries in the array, it could be an exact match (===) or a                                                                            regex matc */
+    /* the top level query to limit documents */
+    tQuery: {},
+    /* the top level field limiter, should definitely include the array being filtered (obviously!) */
+    tFields: {},
+    /* Name of array field that you wish to filter further */
+    aFieldName: 'someArrayField',
+    /* Filter for the entries in the array, it could be an exact match (===) or a regex match */
+    /*            and its treated as a list of "or" conditions */
+    aLimiter: { "someField": "someValue", "someOtherField": /regex/ }
 }
 ```
 
