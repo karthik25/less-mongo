@@ -228,7 +228,7 @@ var less = (function (global) {
         var settings = extend({
             tQuery: {},
             tFields: {},
-            aFieldName: '',
+            aFieldName: null,
             aLimiter: null
         }, options || {});  
         
@@ -251,9 +251,12 @@ var less = (function (global) {
                 arrayField.forEach(function (entry) {
                     matched = false;
                     for (var key in settings.aLimiter) {
-                        if (!matched && entry.hasOwnProperty(key) && entry[key] === settings.aLimiter[key]) {
-                            matchedArrayEntries.push(entry);
-                            matched = true;
+                        if (!matched && entry.hasOwnProperty(key)) {
+                            if ((settings.aLimiter[key] instanceof RegExp && settings.aLimiter[key].test(entry[key])) ||
+                                (entry[key] === settings.aLimiter[key])) {
+                                matchedArrayEntries.push(entry);
+                                matched = true;
+                            }
                         }
                     }
                 });

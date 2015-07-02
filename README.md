@@ -42,6 +42,14 @@ The next useful utility is a .schema utility. Mesh also has one which is much mo
 
 Possible values for options include - query, fields, recurse
 
+```jscript
+{
+    query: {}, /* any valid mongo query */
+    fields: {}, /* any valid mongo field list */
+    recurse: true /* identify the schema for nested object too, valid values are true | false */
+}
+```
+
 You can now also query and return only matchin array entries, using the .findInArray utility!!
 
 ```jscript
@@ -49,5 +57,14 @@ You can now also query and return only matchin array entries, using the .findInA
 ```
 
 Possible values for options include - tQuery (top-level query), tFields (top-level fields), aFieldName (the array field name) and aLimiter (the filter to be applied for the array entries). At this point the key/value pairs cannot be complex and can only be simple equalities, performed using ===
+
+```jscript
+{
+    tQuery: {}, /* the top level query to limit documents */
+    tFields: {}, /* the top level field limiter, should definitely include the array being filtered (obviously!) */
+    aFieldName: 'someArrayField', /* Name of array field that you wish to filter further */
+    aLimiter: { "someField": "someValue", "someOtherField": /regex/ } /* Filter for the entries in the array, it could be an exact match (===) or a                                                                            regex matc */
+}
+```
 
 Thanks to mesh (https://github.com/skratchdot/mesh) for the inspiration! I found mesh when I was reading about wrappers for the shell to reduce the amount of typing I do for one of the products that I work on and from that point I have never looked back :)
