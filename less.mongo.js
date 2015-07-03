@@ -265,4 +265,9 @@ var less = (function (global) {
         
         return matchedArrayEntries;
     };
+    
+    DBCollection.prototype.set = function (query, update, options) {
+        var updateOptions = options || {};
+        return this.update(query, { $set: update }, updateOptions);
+    };
 }());
