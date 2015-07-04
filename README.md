@@ -63,13 +63,13 @@ Possible values for options include - tQuery (top-level query), tFields (top-lev
 
 ```jscript
 {
-    /* the top level query to limit documents */
+    /* top level query to limit documents */
     tQuery: {},
-    /* the top level field limiter, should definitely include the array being filtered (obviously!) */
+    /* top level field limiter, should include the array being filtered (obviously!) */
     tFields: {},
     /* Name of array field that you wish to filter further */
     aFieldName: 'someArrayField',
-    /* Filter for the entries in the array, it could be an exact match (===) or a regex match */
+    /* Filter for the entries in the array, an exact match or a regex */
     /*            and its treated as a list of "or" conditions */
     aLimiter: { "someField": "someValue", "someOtherField": /regex/ }
 }
