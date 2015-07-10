@@ -287,8 +287,22 @@ var less = (function (global) {
  *
  */
 (function (global){
+    'use strict';    
+        
+    global.it = function () {
+        var state = global.state;
+        var part = _.first(state.results, 2);
+        state.results.splice(0, 2);
+        global.state = state;
+        return part;
+    };
+    
     DBCollection.prototype.findInArray2 = function (options) {
         var matchedEntries = this.findInArray(options);
-        return matchedEntries;
+        var part = _.first(matchedEntries, 2);
+        matchedEntries.splice(0, 2);
+        var state = { results: matchedEntries, count: 2 };
+        global.state = state;
+        return part;
     };
-}());
+}(this));
