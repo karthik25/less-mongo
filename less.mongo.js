@@ -288,20 +288,33 @@ var less = (function (global) {
  */
 (function (global){
     'use strict';    
-        
+    
+    var extend = function (settings, options) {
+      for (var key in settings) {
+        if (options.hasOwnProperty(key)) {
+             settings[key] = options[key];   
+        }
+      }
+      return settings;
+    };
+    
     global.it = function () {
         var state = global.state;
-        var part = _.first(state.results, 2);
-        state.results.splice(0, 2);
+        var part = _.first(state.results, state.count);
+        state.results.splice(0, state.count);
         global.state = state;
         return part;
     };
     
     DBCollection.prototype.findInArray2 = function (options) {
+        var settings = extend({
+            defaultCount: 2
+        }, options || {}); 
+        
         var matchedEntries = this.findInArray(options);
-        var part = _.first(matchedEntries, 2);
-        matchedEntries.splice(0, 2);
-        var state = { results: matchedEntries, count: 2 };
+        var part = _.first(matchedEntries, settings.defaultCount);
+        matchedEntries.splice(0, settings.defaultCount);
+        var state = { results: matchedEntries, count: settings.defaultCount };
         global.state = state;
         return part;
     };
