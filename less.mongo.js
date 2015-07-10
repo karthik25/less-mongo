@@ -277,3 +277,18 @@ var less = (function (global) {
         return this.update(query, { $set: update }, updateOptions);
     };
 }());
+
+/*
+ * less.iterables - set of utilities that supports iterating through the results
+ *
+ *      Version 1.0.0
+ *
+ *  Copyright 2015 
+ *
+ */
+(function (global){
+    DBCollection.prototype.findInArray2 = function (options) {
+        var matchedEntries = this.findInArray(options);
+        return matchedEntries;
+    };
+}());
