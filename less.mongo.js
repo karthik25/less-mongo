@@ -306,20 +306,22 @@ var less = (function (global) {
             return;
         }
         
-        var part = _.first(state.results, state.count);
-        state.results.splice(0, state.count);
+        var spliceCount = state.results.length >= state.count ? state.count : state.results.length;
+        var part = _.first(state.results, spliceCount);
+        state.results.splice(0, spliceCount);
         global.state = state;
         return part;
     };
     
     DBCollection.prototype.findInArray2 = function (options) {
         var settings = extend({
-            defaultCount: 2
+            defaultCount: 10
         }, options || {}); 
         
         var matchedEntries = this.findInArray(options);
-        var part = _.first(matchedEntries, settings.defaultCount);
-        matchedEntries.splice(0, settings.defaultCount);
+        var spliceCount = matchedEntries.length >= settings.defaultCount ? settings.defaultCount : matchedEntries.length;
+        var part = _.first(matchedEntries, spliceCount);
+        matchedEntries.splice(0, spliceCount);
         var state = { results: matchedEntries, count: settings.defaultCount };
         global.state = state;
         return part;
