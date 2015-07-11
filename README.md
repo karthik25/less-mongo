@@ -97,6 +97,17 @@ The options are the same as the ones for `findInArray`, with the exception of `d
 > it()
 ```
 
-With this you will either see more results or just the message iterator exhausted, if there is nothing more to display.
+With this you will either see more results or just the message **iterator exhausted**, if there is nothing more to display.
+
+# Bonus utilities
+
+less.mongo includes the underscore.js library. So you also get to use the functions provided by underscore automatically! For example:
+
+```jscript
+> var arr = db.collection.find({ }).toArray()
+> _.first(arr, 1)
+```
+
+The above set of lines, first "finds" all the entries in a collection and just prints the first entry using the `first` utility provided by underscore!
 
 Thanks to mesh (https://github.com/skratchdot/mesh) for the inspiration! I found mesh when I was reading about wrappers for the shell to reduce the amount of typing I do for one of the products that I work on and from that point I have never looked back :)
