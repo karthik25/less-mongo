@@ -300,6 +300,12 @@ var less = (function (global) {
     
     global.it = function () {
         var state = global.state;
+        
+        if (state.results == null || state.results.length === 0) {
+            print("iterator exhausted");
+            return;
+        }
+        
         var part = _.first(state.results, state.count);
         state.results.splice(0, state.count);
         global.state = state;
