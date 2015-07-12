@@ -10,12 +10,14 @@ module.exports = function(grunt) {
 		// Task configuration.
 		concat: {
 			options: {
-				stripBanners: true
+				stripBanners: false
 			},
 			dist: {
 				src: [
 					'src/less.mongo.js',
-					'src/less.iterables.js'
+                    'lib/underscore.js',
+					'src/less.helpers.js',
+                    'src/less.iterables.js'
 				],
 				dest: 'less.mongo.js'
 			}

@@ -1,0 +1,49 @@
+/*
+ * less.iterables - set of utilities that supports iterating through the results
+ *
+ *      Version 1.0.0
+ *
+ *  Copyright 2015 
+ *
+ */
+(function (global){
+    'use strict';    
+    
+    var extend = function (settings, options) {
+      for (var key in settings) {
+        if (options.hasOwnProperty(key)) {
+             settings[key] = options[key];   
+        }
+      }
+      return settings;
+    };
+    
+    global.it = function () {
+        var state = global.state;
+        
+        if (state.results == null || state.results.length === 0) {
+            print("iterator exhausted");
+            return;
+        }
+        
+        var spliceCount = state.results.length >= state.count ? state.count : state.results.length;
+        var part = _.first(state.results, spliceCount);
+        state.results.splice(0, spliceCount);
+        global.state = state;
+        return part;
+    };
+    
+    DBCollection.prototype.findInArray2 = function (options) {
+        var settings = extend({
+            defaultCount: 10
+        }, options || {}); 
+        
+        var matchedEntries = this.findInArray(options);
+        var spliceCount = matchedEntries.length >= settings.defaultCount ? settings.defaultCount : matchedEntries.length;
+        var part = _.first(matchedEntries, spliceCount);
+        matchedEntries.splice(0, spliceCount);
+        var state = { results: matchedEntries, count: settings.defaultCount };
+        global.state = state;
+        return part;
+    };
+}(this));
