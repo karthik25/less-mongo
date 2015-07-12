@@ -1,6 +1,6 @@
 {
-  "name": "gruntcheck",
-  "version": "0.1.0",
+  "name": "less.mongo",
+  "version": "1.0.0",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-contrib-jshint": "latest",
