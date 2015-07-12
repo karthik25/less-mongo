@@ -18,7 +18,7 @@ To get a list of all possible options, type:
 > less.help()
 ```
 
-# less.helpers
+## less.helpers
 
 less.helpers provides utilities that would otherwise require a lot of typing. Right now you have the following utilities.
 
@@ -81,7 +81,7 @@ To update value(s) in mongo, you need to use `$set`. If you don't or just forget
 > db.collection.set({ }, {"someField": "someValue"})
 ```
 
-# less.iterables
+## less.iterables
 
 Even if you have used mongo once, you must have used iterables. For example if you write a `find()` query and if the result set has more than 10 entries, you get to first see 10 entries and then you have to enter it to display the next 10 and so on. With that said lets look at the utilities that supports iterables, one by one.
 
@@ -99,7 +99,7 @@ The options are the same as the ones for `findInArray`, with the exception of `d
 
 With this you will either see more results or just the message **iterator exhausted**, if there is nothing more to display.
 
-# Bonus utilities
+## Bonus utilities
 
 less.mongo includes the underscore.js library. So you also get to use the functions provided by underscore automatically! For example:
 
