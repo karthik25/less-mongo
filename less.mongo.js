@@ -235,8 +235,9 @@ var less = (function (global) {
             tQuery: {},
             tFields: {},
             aFieldName: null,
-            aLimiter: null
-        }, options || {});  
+            aLimiter: null,
+            parentIdentifier: null
+        }, options || {});
         
         if (! settings.aFieldName) {
             throw new Error("Array field name cannot be null - aFieldName");
@@ -248,6 +249,15 @@ var less = (function (global) {
         while (cursor.hasNext()){
             var current = cursor.next();
             var arrayField = current[settings.aFieldName];
+            var parentId = {};
+            if (settings.parentIdentifier) {
+                if (typeof settings.parentIdentifier === "string") {
+                    parentId[settings.parentIdentifier] = current[settings.parentIdentifier];
+                }
+                else if (typeof settings.parentIdentifier === "function") {
+                    parentId["p__obj"] = settings.parentIdentifier(current);   
+                }
+            }
             
             if (!settings.aLimiter) {
                 matchedArrayEntries = matchedArrayEntries.concat(arrayField);
@@ -260,6 +270,9 @@ var less = (function (global) {
                         if (!matched && entry.hasOwnProperty(key)) {
                             if ((settings.aLimiter[key] instanceof RegExp && settings.aLimiter[key].test(entry[key])) ||
                                 (entry[key] === settings.aLimiter[key])) {
+                                if (settings.parentIdentifier) {                                    
+                                    entry["p__id"] = parentId;
+                                }
                                 matchedArrayEntries.push(entry);
                                 matched = true;
                             }
