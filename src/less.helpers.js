@@ -164,7 +164,13 @@
             }
             
             if (!settings.aLimiter) {
-                matchedArrayEntries = matchedArrayEntries.concat(arrayField);
+                var allEntries = arrayField;
+                if (settings.parentIdentifier) {
+                    allEntries.forEach(function(arrayItem) {
+                      arrayItem["p__id"] = parentId;  
+                    };
+                }
+                matchedArrayEntries = matchedArrayEntries.concat(allEntries);
             }
             else {
                 var matched;
