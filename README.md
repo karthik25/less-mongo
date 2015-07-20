@@ -18,7 +18,7 @@ To get a list of all possible options, type:
 > less.help()
 ```
 
-If you are interested in investing more time in less.mongo, check out the [wiki](https://github.com/karthik25/less-mongo/wiki)!!
+If you are interested in investing more time in `less.mongo`, check out the [wiki](https://github.com/karthik25/less-mongo/wiki). It contains a complete tutorial with the necessary resources to get started in `less.mongo`!!
 
 ## Bonus utilities
 
