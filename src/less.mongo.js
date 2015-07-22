@@ -39,14 +39,35 @@ var less = (function (global) {
         }
     ];
     
+    /*
+     * function : less()
+     * params   : <none>
+     * 
+     * prints the version of less.mongo
+     *
+     * /
 	api = function () {
 		return api.version();
 	};
 
+    /*
+     * function : less()
+     * params   : <none>
+     * 
+     * prints the version of less.mongo
+     *
+     * /
     api.version = function () {
       return print("type less do more! :: less.mongo v" + version);  
     };
     
+    /*
+     * function : less.help
+     * params   : <none>
+     * 
+     * prints a message about various functions available in less.mongo
+     *
+     * /
     api.help = function () {
         print("#############################################################################\n");
         print("###                      less.mongo                                       ###\n");
@@ -63,6 +84,15 @@ var less = (function (global) {
         });
     };
     
+    /*
+     * function : less.listCollections
+     * params   : regex (optional)
+     * 
+     * prints the collections in the current db
+     * if a regex parameter is passed, collections matching
+     *      the regex will be printed
+     *
+     * /
     api.listCollections = function (regex) {
         var collections = db.getCollectionNames();
         collections.forEach(function (collection){
@@ -77,8 +107,22 @@ var less = (function (global) {
       });
     };
     
+    /*
+     * function : less.c
+     * params   : regex (optional)
+     * 
+     * a shortcut for listCollections
+     *
+     * /
     api.c = api.listCollections;
-    
+
+    /*
+     * function : less.prompt
+     * params   : <none>
+     * 
+     * changes the default prompt '>' to 'db-name>'
+     *
+     * /
     api.prompt = function (){
       global.prompt = function (){
         return db.getName() +  "> ";
