@@ -45,7 +45,7 @@ var less = (function (global) {
      * 
      * prints the version of less.mongo
      *
-     * /
+     */
 	api = function () {
 		return api.version();
 	};
@@ -56,7 +56,7 @@ var less = (function (global) {
      * 
      * prints the version of less.mongo
      *
-     * /
+     */
     api.version = function () {
       return print("type less do more! :: less.mongo v" + version);  
     };
@@ -67,7 +67,7 @@ var less = (function (global) {
      * 
      * prints a message about various functions available in less.mongo
      *
-     * /
+     */
     api.help = function () {
         print("#############################################################################\n");
         print("###                      less.mongo                                       ###\n");
@@ -92,7 +92,7 @@ var less = (function (global) {
      * if a regex parameter is passed, collections matching
      *      the regex will be printed
      *
-     * /
+     */
     api.listCollections = function (regex) {
         var collections = db.getCollectionNames();
         collections.forEach(function (collection){
@@ -113,7 +113,7 @@ var less = (function (global) {
      * 
      * a shortcut for listCollections
      *
-     * /
+     */
     api.c = api.listCollections;
 
     /*
@@ -122,7 +122,7 @@ var less = (function (global) {
      * 
      * changes the default prompt '>' to 'db-name>'
      *
-     * /
+     */
     api.prompt = function (){
       global.prompt = function (){
         return db.getName() +  "> ";

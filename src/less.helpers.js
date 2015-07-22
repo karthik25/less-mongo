@@ -109,18 +109,51 @@
         return _schema;
     };
     
+    /*
+     * function  : getMaxDocStats
+     * called on : a query - db.<collection-name>.find({}).getMaxDocStats()
+     * params    : <none>
+     * 
+     * prints some information about the document w/ the maximum size
+     *
+     */
     DBQuery.prototype.getMaxDocStats = function () {
       return getMaxDocStats(this);
     };
     
+    /*
+     * function  : getMaxDocStats
+     * called on : a query - db.<collection-name>.getMaxDocStats()
+     * params    : <none>
+     * 
+     * prints some information about the document w/ the maximum size
+     *
+     */
     DBCollection.prototype.getMaxDocStats = function (query, fields, limit, skip, batchSize, options) {
       return this.find(query, fields, limit, skip, batchSize, options).getMaxDocStats();  
     };
     
+    /*
+     * function  : collectionStats
+     * called on : a db - db.collectionStats()
+     * params    : <none>
+     * 
+     * prints some information about every collection in the current db
+     *
+     */
     DB.prototype.collectionStats = function () {
       return collectionStats(this);
     };
     
+    /*
+     * function  : schema
+     * called on : a collection - db.<collection-name>.schema()
+     * params    : options object
+     * 
+     * tries to infer the schema of the collections using defaults or the options object passed
+     *          refer to the wiki for more information
+     *
+     */
     DBCollection.prototype.schema = function (options) {
         var settings = extend({
             query: {},
@@ -134,6 +167,14 @@
         return _schema;
     };
     
+    /*
+     * function  : findInArray
+     * called on : a collection - db.<collection-name>.findInArray()
+     * params    : options object
+     * 
+     * provides the ability to filter arrays and return them as the result using simple key/value pairs
+     *
+     */
     DBCollection.prototype.findInArray = function (options) {
         var settings = extend({
             tQuery: {},
@@ -168,7 +209,7 @@
                 if (settings.parentIdentifier) {
                     allEntries.forEach(function(arrayItem) {
                       arrayItem["p__id"] = parentId;  
-                    };
+                    });
                 }
                 matchedArrayEntries = matchedArrayEntries.concat(allEntries);
             }
@@ -195,6 +236,16 @@
         return matchedArrayEntries;
     };
     
+    /*
+     * function  : set
+     * called on : a collection - db.<collection-name>.set()
+     * params    : query - to select the documents to be updated
+     *             update - the fields to be updated
+     *             options - other options like support multi update etc
+     * 
+     * acts as a wrapper to an update statement
+     *
+     */
     DBCollection.prototype.set = function (query, update, options) {
         var updateOptions = options || {};
         return this.update(query, { $set: update }, updateOptions);

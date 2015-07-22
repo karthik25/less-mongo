@@ -39,14 +39,35 @@ var less = (function (global) {
         }
     ];
     
+    /*
+     * function : less()
+     * params   : <none>
+     * 
+     * prints the version of less.mongo
+     *
+     */
 	api = function () {
 		return api.version();
 	};
 
+    /*
+     * function : less()
+     * params   : <none>
+     * 
+     * prints the version of less.mongo
+     *
+     */
     api.version = function () {
       return print("type less do more! :: less.mongo v" + version);  
     };
     
+    /*
+     * function : less.help
+     * params   : <none>
+     * 
+     * prints a message about various functions available in less.mongo
+     *
+     */
     api.help = function () {
         print("#############################################################################\n");
         print("###                      less.mongo                                       ###\n");
@@ -63,6 +84,15 @@ var less = (function (global) {
         });
     };
     
+    /*
+     * function : less.listCollections
+     * params   : regex (optional)
+     * 
+     * prints the collections in the current db
+     * if a regex parameter is passed, collections matching
+     *      the regex will be printed
+     *
+     */
     api.listCollections = function (regex) {
         var collections = db.getCollectionNames();
         collections.forEach(function (collection){
@@ -77,8 +107,22 @@ var less = (function (global) {
       });
     };
     
+    /*
+     * function : less.c
+     * params   : regex (optional)
+     * 
+     * a shortcut for listCollections
+     *
+     */
     api.c = api.listCollections;
-    
+
+    /*
+     * function : less.prompt
+     * params   : <none>
+     * 
+     * changes the default prompt '>' to 'db-name>'
+     *
+     */
     api.prompt = function (){
       global.prompt = function (){
         return db.getName() +  "> ";
@@ -205,18 +249,51 @@ var less = (function (global) {
         return _schema;
     };
     
+    /*
+     * function  : getMaxDocStats
+     * called on : a query - db.<collection-name>.find({}).getMaxDocStats()
+     * params    : <none>
+     * 
+     * prints some information about the document w/ the maximum size
+     *
+     */
     DBQuery.prototype.getMaxDocStats = function () {
       return getMaxDocStats(this);
     };
     
+    /*
+     * function  : getMaxDocStats
+     * called on : a query - db.<collection-name>.getMaxDocStats()
+     * params    : <none>
+     * 
+     * prints some information about the document w/ the maximum size
+     *
+     */
     DBCollection.prototype.getMaxDocStats = function (query, fields, limit, skip, batchSize, options) {
       return this.find(query, fields, limit, skip, batchSize, options).getMaxDocStats();  
     };
     
+    /*
+     * function  : collectionStats
+     * called on : a db - db.collectionStats()
+     * params    : <none>
+     * 
+     * prints some information about every collection in the current db
+     *
+     */
     DB.prototype.collectionStats = function () {
       return collectionStats(this);
     };
     
+    /*
+     * function  : schema
+     * called on : a collection - db.<collection-name>.schema()
+     * params    : options object
+     * 
+     * tries to infer the schema of the collections using defaults or the options object passed
+     *          refer to the wiki for more information
+     *
+     */
     DBCollection.prototype.schema = function (options) {
         var settings = extend({
             query: {},
@@ -230,6 +307,14 @@ var less = (function (global) {
         return _schema;
     };
     
+    /*
+     * function  : findInArray
+     * called on : a collection - db.<collection-name>.findInArray()
+     * params    : options object
+     * 
+     * provides the ability to filter arrays and return them as the result using simple key/value pairs
+     *
+     */
     DBCollection.prototype.findInArray = function (options) {
         var settings = extend({
             tQuery: {},
@@ -260,7 +345,13 @@ var less = (function (global) {
             }
             
             if (!settings.aLimiter) {
-                matchedArrayEntries = matchedArrayEntries.concat(arrayField);
+                var allEntries = arrayField;
+                if (settings.parentIdentifier) {
+                    allEntries.forEach(function(arrayItem) {
+                      arrayItem["p__id"] = parentId;  
+                    });
+                }
+                matchedArrayEntries = matchedArrayEntries.concat(allEntries);
             }
             else {
                 var matched;
@@ -285,6 +376,16 @@ var less = (function (global) {
         return matchedArrayEntries;
     };
     
+    /*
+     * function  : set
+     * called on : a collection - db.<collection-name>.set()
+     * params    : query - to select the documents to be updated
+     *             update - the fields to be updated
+     *             options - other options like support multi update etc
+     * 
+     * acts as a wrapper to an update statement
+     *
+     */
     DBCollection.prototype.set = function (query, update, options) {
         var updateOptions = options || {};
         return this.update(query, { $set: update }, updateOptions);
@@ -311,6 +412,14 @@ var less = (function (global) {
       return settings;
     };
     
+    /*
+     * function  : it()
+     * 
+     * if a previous findInArray2 was performed and there are more results, they are printed
+     * could be called numerous times - if there are no more results to be displayed, prints a
+     * corresponding message
+     *
+     */    
     global.it = function () {
         var state = global.state;
         
@@ -326,6 +435,16 @@ var less = (function (global) {
         return part;
     };
     
+    /*
+     * function  : findInArray2
+     * called on : a collection - db.<collection-name>.findInArray2()
+     * params    : options object
+     * 
+     * provides the ability to filter arrays and return them as the result using simple key/value pairs
+     * this is an add-on to findInArray, where you get to see a subset of the results
+     * to print the remainder of the results, use it() - see above
+     *
+     */
     DBCollection.prototype.findInArray2 = function (options) {
         var settings = extend({
             defaultCount: 10
