@@ -31,7 +31,7 @@ less.mongo includes the underscore.js library. So you also get to use the functi
 
 The above set of lines, first "finds" all the entries in a collection and just prints the first entry using the `first` utility provided by underscore!
 
-# Building/ Contributing
+## Building/ Contributing
 
 To contribute/modify and re-build the `less.mongo.js` file, you need to have `npm` installed, so that you can install the grunt package. Instead of modifying the less.mongo.js file, you just have to modify the files within the `src` folder. To regenerate the file, do the following:
 
