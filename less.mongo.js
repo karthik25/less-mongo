@@ -293,7 +293,7 @@ var less = (function (global) {
     
     /*
      * function  : getMaxDocStats
-     * called on : a query - db.<collection-name>.getMaxDocStats()
+     * called on : a collection - db.<collection-name>.getMaxDocStats()
      * params    : <none>
      * 
      * prints some information about the document w/ the maximum size
@@ -319,7 +319,7 @@ var less = (function (global) {
     
     /*
      * function  : getDocsAboveThreshold
-     * called on : a query - db.<collection-name>.getDocsAboveThreshold()
+     * called on : a collection - db.<collection-name>.getDocsAboveThreshold()
      * params    : threshold (a number)
      * 
      * returns an object that contains helpful properties / functions
