@@ -48,6 +48,36 @@
           maxDocId: maxDocId
         };
     };
+    
+    var getStatsForDocsAboveThreshold = function (cursor, threshold) {
+        var doc, size;
+        var result = {
+            items: [],
+            count: function () {
+                return this.items.length;
+            },
+            max: function () {
+                return _.max(this.items, function(item) {
+                   return item.document_size; 
+                });
+            },
+            min: function () {
+                return _.min(this.items, function (item) {
+                   return item.document_size; 
+                });
+            }
+        };
+        while (cursor.hasNext()) {
+            doc = cursor.next();
+            size = Object.bsonsize(doc);
+            
+            if (size >= threshold) {
+                result.items.push({ document_id: doc._id, document_size: size });
+            }
+        }
+        
+        return result;
+    };
 
     var processCollection = function (db, collectionName){
        var count = db.getCollection(collectionName).count();
@@ -134,6 +164,35 @@
     };
     
     /*
+     * function  : getDocsAboveThreshold
+     * called on : a query - db.<collection-name>.find({}).getDocsAboveThreshold()
+     * params    : threshold (a number)
+     * 
+     * returns an object that contains helpful properties / functions
+     *         items - a property that contains information about the documents w/ size above the threshold
+     *         max, min, count - functions to provide more aggregate information
+     *
+     */
+    DBQuery.prototype.getDocsAboveThreshold = function (threshold) {
+      return getStatsForDocsAboveThreshold(this, threshold);
+    };
+    
+    /*
+     * function  : getDocsAboveThreshold
+     * called on : a query - db.<collection-name>.getDocsAboveThreshold()
+     * params    : threshold (a number)
+     * 
+     * returns an object that contains helpful properties / functions
+     *         items - a property that contains information about the documents w/ size above the threshold
+     *         max, min, count - functions to provide more aggregate information
+     *
+     */
+    DBCollection.prototype.getDocsAboveThreshold = function (threshold) {
+      var cursor = this.find({ });
+      return getStatsForDocsAboveThreshold(cursor, threshold);
+    };
+    
+    /*
      * function  : collectionStats
      * called on : a db - db.collectionStats()
      * params    : <none>
@@ -144,7 +203,22 @@
     DB.prototype.collectionStats = function () {
       return collectionStats(this);
     };
-    
+        
+    /*
+     * function  : set
+     * called on : a collection - db.<collection-name>.set()
+     * params    : query - to select the documents to be updated
+     *             update - the fields to be updated
+     *             options - other options like support multi update etc
+     * 
+     * acts as a wrapper to an update statement
+     *
+     */
+    DBCollection.prototype.set = function (query, update, options) {
+        var updateOptions = options || {};
+        return this.update(query, { $set: update }, updateOptions);
+    };
+
     /*
      * function  : schema
      * called on : a collection - db.<collection-name>.schema()
@@ -234,20 +308,5 @@
         }
         
         return matchedArrayEntries;
-    };
-    
-    /*
-     * function  : set
-     * called on : a collection - db.<collection-name>.set()
-     * params    : query - to select the documents to be updated
-     *             update - the fields to be updated
-     *             options - other options like support multi update etc
-     * 
-     * acts as a wrapper to an update statement
-     *
-     */
-    DBCollection.prototype.set = function (query, update, options) {
-        var updateOptions = options || {};
-        return this.update(query, { $set: update }, updateOptions);
     };
 }());
